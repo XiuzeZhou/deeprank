@@ -3,9 +3,11 @@
 DeepRank: Learning to Rank with Neural Networks for Recommendation
 
 - **Run listwise DeepRank**:
+
 $ python DeepRank.py --path datasets --data_name ml-100k/u.data --epoches 40 --batch_size 512 --user_factors 16 --item_factors 16 --layers [16,8] --reg 0.00001 --list_length 5 --num_positive 2 --sample_time 2 --top_n 10 --lr 0.01 --path_model model
 
 - **Run pairwise DeepRank**:
+
 $ python DeepRank.py --path datasets --data_name ml-100k/u.data --epoches 40 --batch_size 512 --user_factors 16 --item_factors 16 --layers [16,8] --reg 0.00001 --list_length 2 --num_positive 1 --sample_time 4 --top_n 10 --lr 0.01 --path_model model
 
 ## Parameter description：
