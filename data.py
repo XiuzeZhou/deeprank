@@ -87,3 +87,34 @@ def generate_data(train_mat, positive_size=1, list_length=5, sample_size=2):
                 np.random.shuffle(line) 
                 data.append(np.array(line))
     return data
+
+
+def get_train_test(rating_mat):
+    n,m = rating_mat.shape
+    
+    selected_items,rest_ratings,negtive_items = [],[],[]
+    for user_line in rating_mat:
+        rated_items = np.where(user_line>0)[0]
+        rated_num = len(rated_items)
+        random_ids = [i for i in range(rated_num)]
+        np.random.shuffle(random_ids)
+        selected_id = random_ids[0]
+        selected_items.append(rated_items[selected_id])
+        rest_ratings.append(rated_items[random_ids[1:]])
+        
+        unrated_items = np.where(user_line==0)[0]
+        unrated_num = len(unrated_items)
+        random_ids = [i for i in range(unrated_num)]
+        np.random.shuffle(random_ids)
+        negtive_items.append(unrated_items[random_ids[:99]])
+        
+    train = [[user, item, rating_mat[user,item]] for user in range(n) for item in rest_ratings[user]]   
+    test = [[user, selected_items[user]] for user in range(n)]
+    
+    length = int(n*0.1) # 评分数据最少的10%的用户
+    rated_size = np.sum(rating_mat>0,1)
+    rated_order = np.argsort(rated_size) # 升序排列的用户id
+    sparse_user = rated_order[:length]
+    
+    np.random.shuffle(train)  
+    return train,test,negtive_items,sparse_user
