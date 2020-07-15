@@ -97,7 +97,7 @@ class DeepRank():
             # _________ prediction _____________
             self.predictions = self.inference(user_inputs=self.user_ids, item_inputs=self.item_ids)
         
-            #变量初始化 init
+            # Variable initialization
             self.saver = tf.train.Saver() #  
             init = tf.global_variables_initializer()
             self.sess = self._init_session()
@@ -226,7 +226,7 @@ def train(model, train_list, test_list, users_num, items_num,
     print('Init: HR = %.4f, NDCG = %.4f' %(hr, ndcg))
     best_hr, best_ndcg = hr, ndcg
     for epoch in range(epoches):
-        data_sequence = generate_data(train_mat=train_mat, positive_size=positive_size, list_length=list_length, sample_size=sample_size)
+        data_sequence = generate_list(train_mat=train_mat, positive_size=positive_size, list_length=list_length, sample_size=sample_size)
         loss_records = model.train(data_sequence=data_sequence)
         hr,ndcg = model.evaluate(test_sequence=test_list, topK=topK)
         hr_list.append(hr)
