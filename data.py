@@ -1,6 +1,6 @@
 import numpy as np
 
-# read original records
+# Read original records
 def load_data(file_dir):
     # output: 
     # N: the number of user;
@@ -31,6 +31,7 @@ def load_data(file_dir):
     return N, M, data, rated_item_ids_dict
 
 
+# Convert the list data to array
 def sequence2mat(sequence, N, M):
     # input:
     # sequence: the list of rating information
@@ -39,10 +40,10 @@ def sequence2mat(sequence, N, M):
     # output:
     # mat: user-item rating matrix
     records_array = np.array(sequence)
-    mat = np.zeros([N,M])
     row = records_array[:,0].astype(int)
     col = records_array[:,1].astype(int)
     values = records_array[:,2].astype(np.float32)
+    mat = np.zeros([N,M])
     mat[row,col]=values
     
     return mat
@@ -62,33 +63,35 @@ def read_data(file_dir):
     return data
 
 
-def generate_data(train_mat, positive_size=1, list_length=5, sample_size=2):
+# Genarate instances from train dataset
+def generate_list(train_mat, positive_size=1, list_length=5, sample_size=2):
     data = []
     users_num,items_num = train_mat.shape
     for u in range(users_num):
-        rated_items = np.where(train_mat[u,:]>0)[0] #用户u中有评分项的id
+        rated_items = np.where(train_mat[u,:]>0)[0]
+        unrated_items = np.where(train_mat[u,:]==0)[0]
         
-        for _ in range(sample_size):
-            for item0 in rated_items:
-                line = []
-                line.append([u,item0,1])
-                i = 1 # 正样本数
-                while i < positive_size:
-                    item1 = np.random.randint(items_num)
-                    if (item1 in rated_items) and (item1 !=item0):
-                        line.append([u,item1,1])
-                        i = i+1
-                i = 0 # 负样本数
-                while i<list_length-positive_size:
-                    item1 = np.random.randint(items_num)
-                    if item1 not in rated_items:
-                        line.append([u,item1,0])
-                        i = i+1
-                np.random.shuffle(line) 
-                data.append(np.array(line))
+        for item0 in rated_items:
+            line0 = []
+            line0.append([u,item0,1])
+            
+            positive_items = np.random.choice(rated_items, size=positive_size-1, replace=False)
+            for item1 in positive_items:
+                line0.append([u,item1,1])
+           
+            for _ in range(sample_size):
+                line1 = []
+                negtive_items = np.random.choice(unrated_items, size=list_length-positive_size, replace=False)
+                for item1 in negtive_items:
+                    line1.append([u,item1,0])
+                line2 = line0 + line1
+                np.random.shuffle(line2) 
+                data.append(np.array(line2))
+            
     return data
 
 
+# Generate train and test from raw user-item interactions
 def get_train_test(rating_mat):
     n,m = rating_mat.shape
     
@@ -111,9 +114,9 @@ def get_train_test(rating_mat):
     train = [[user, item, rating_mat[user,item]] for user in range(n) for item in rest_ratings[user]]   
     test = [[user, selected_items[user]] for user in range(n)]
     
-    length = int(n*0.1) # 评分数据最少的10%的用户
+    length = int(n*0.1)
     rated_size = np.sum(rating_mat>0,1)
-    rated_order = np.argsort(rated_size) # 升序排列的用户id
+    rated_order = np.argsort(rated_size)
     sparse_user = rated_order[:length]
     
     np.random.shuffle(train)  
