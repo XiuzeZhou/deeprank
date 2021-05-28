@@ -1,5 +1,7 @@
 # DeepRank
 
+中文讲解请移步我的博客：http://snailwish.com/149/
+
 DeepRank: Learning to Rank with Neural Networks for Recommendation
 
 - **Run listwise DeepRank**:
