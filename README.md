@@ -27,3 +27,9 @@ $ python DeepRank.py --path datasets --data_name ml-100k/u.data --epoches 40 --b
 - top_n: Number of top_n list for recommendation.
 - lr: Learning rate.
 - path_model: Output path for saving pre_trained model.
+
+**主要库版本：** tensorflow 1.14.0
+
+**Homepage:** http://zhouxiuze.com
+
+**个人博客：** http://snailwish.com/
