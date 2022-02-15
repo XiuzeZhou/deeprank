@@ -1,6 +1,6 @@
 # DeepRank
 
-M. Chen, X. Zhou*, "DeepRank: Learning to Rank with Neural Networks for Recommendation", Knowledge-Based Systems, Dec. 2020, 209, pp. 106478.
+M. Chen, X. Zhou, "DeepRank: Learning to Rank with Neural Networks for Recommendation", *Knowledge-Based Systems*, Dec. 2020, 209, pp. 106478.
 
 中文讲解请移步我的博客：http://snailwish.com/149/
 
